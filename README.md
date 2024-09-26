@@ -21,7 +21,7 @@ Atlas-logs is a Flask-based application for collecting, storing, and analyzing s
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/atlas-logs.git
+   git clone https://github.com/eltonlaice/atlas-logs.git
    cd atlas-logs
    ```
 
