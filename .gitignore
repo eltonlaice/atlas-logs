@@ -110,6 +110,5 @@ dmypy.json
 .pyre/
 
 # Project specific
-config.py
 *.pem
 *.key
