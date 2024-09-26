@@ -178,4 +178,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Support
 
-For support, please open an issue on the GitHub repository or contact the maintainers directly at support@example.com.
+For support, please open an issue on the GitHub repository or contact the maintainers directly at meu@eltonlaice.com.
