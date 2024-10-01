@@ -2,6 +2,7 @@ from flask import Blueprint, request, render_template, redirect, url_for, flash,
 from werkzeug.security import check_password_hash, generate_password_hash
 from app.utils.db import db
 from app.utils.db import AuditLog
+from flask_login import login_required, current_user
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -58,4 +59,14 @@ def register():
             return redirect(url_for('auth.login'))
     
     return render_template('register.html')
+
+@auth_bp.route('/search')
+@login_required
+def search():
+    return render_template('search.html')
+
+# Add a login manager unauthorized handler
+@auth_bp.unauthorized_handler
+def unauthorized():
+    return redirect(url_for('auth.login'))
 
