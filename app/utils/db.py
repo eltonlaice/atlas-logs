@@ -1,71 +1,45 @@
 from pymongo import MongoClient
-from dotenv import load_dotenv
-import os
+from datetime import datetime
 
-# Load environment variables
-load_dotenv()
-
-# MongoDB connection settings
-MONGO_URI = os.getenv('MONGO_URI')
-DB_NAME = os.getenv('DB_NAME')
-
-# Create a MongoDB client
-client = MongoClient(MONGO_URI)
-
-# Get the database
-db = client[DB_NAME]
-
-# Get the audit_logs collection
-audit_logs = db.audit_logs
-
-# Create a text index on the message field for text search
-audit_logs.create_index([('message', 'text')])
-
-# Create an index on the timestamp field for efficient date-based queries
-audit_logs.create_index('timestamp')
+# MongoDB connection
+client = MongoClient('mongodb://localhost:27017/')
+db = client['audit_log_db']
 
 class AuditLog:
-    def __init__(self, message, level="INFO", server=None):
-        self.timestamp = datetime.utcnow()
-        self.level = level
+    def __init__(self, message, level="INFO"):
         self.message = message
-        self.server = server
+        self.level = level
+        self.timestamp = datetime.now()
 
     def save(self):
         log_entry = {
-            "timestamp": self.timestamp,
-            "level": self.level,
-            "message": self.message,
-            "server": self.server
+            'message': self.message,
+            'level': self.level,
+            'timestamp': self.timestamp
         }
-        result = audit_logs.insert_one(log_entry)
-        return str(result.inserted_id)
+        db.audit_logs.insert_one(log_entry)
 
-    @staticmethod
-    def query(query=None, start_date=None, end_date=None, server=None, limit=100):
-        filter_criteria = {}
+# User collection
+users = db.users
 
-        if query:
-            filter_criteria["$text"] = {"$search": query}
+# Function to get a user by username
+def get_user_by_username(username):
+    return users.find_one({'username': username})
 
-        if start_date or end_date:
-            date_filter = {}
-            if start_date:
-                date_filter["$gte"] = start_date
-            if end_date:
-                date_filter["$lte"] = end_date
-            filter_criteria["timestamp"] = date_filter
+# Function to create a new user
+def create_user(username, email, password_hash, role):
+    new_user = {
+        'username': username,
+        'email': email,
+        'password': password_hash,
+        'role': role
+    }
+    return users.insert_one(new_user)
 
-        if server:
-            filter_criteria["server"] = server
+# Function to update user information
+def update_user(user_id, update_data):
+    return users.update_one({'_id': user_id}, {'$set': update_data})
 
-        cursor = audit_logs.find(filter_criteria).sort("timestamp", -1).limit(limit)
-        return [AuditLog.from_dict(log) for log in cursor]
-
-    @classmethod
-    def from_dict(cls, log_dict):
-        log = cls(log_dict['message'], log_dict['level'], log_dict['server'])
-        log.timestamp = log_dict['timestamp']
-        return log
-
-
+# Function to delete a user
+def delete_user(user_id):
+    return users.delete_one({'_id': user_id})
