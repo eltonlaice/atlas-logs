@@ -170,12 +170,6 @@ Ensure that you update tests as appropriate and adhere to the existing coding st
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Acknowledgments
-
-- Flask team for the excellent web framework
-- MongoDB team for the robust database system
-- OpenAI for their powerful language models
-
 ## Support
 
 For support, please open an issue on the GitHub repository or contact the maintainers directly at meu@eltonlaice.com.
