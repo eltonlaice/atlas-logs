@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% set active_page = "search" %}
+
+{% block title %}Search Results - Atlas-logs{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Log Search Results</h1>
+
+<form action="{{ url_for('search.search_logs') }}" method="post" class="mb-4">
+    <div class="row g-3">
+        <div class="col-md-6">
+            <input type="text" class="form-control" id="query" name="query" placeholder="Enter search query" value="{{ request.form.get('query', '') }}">
+        </div>
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+</form>
+
+{% if results %}
+    <h2>Results:</h2>
+    <div class="list-group">
+    {% for result in results %}
+        <div class="list-group-item">
+            <pre>{{ result }}</pre>
+        </div>
+    {% endfor %}
+    </div>
+{% else %}
+    <p>No results found.</p>
+{% endif %}
+{% endblock %}
