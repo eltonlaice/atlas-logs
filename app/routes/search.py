@@ -1,5 +1,4 @@
 from flask import Blueprint, request, render_template
-from app.utils.search_utils import perform_search
 
 search_bp = Blueprint('search', __name__)
 
