@@ -2,13 +2,14 @@ from flask import Blueprint, request, render_template
 
 search_bp = Blueprint('search', __name__)
 
+
 @search_bp.route('/search', methods=['GET', 'POST'])
 def search_logs():
     if request.method == 'POST':
         query = request.form.get('query', '')
     else:
         query = request.args.get('query', '')
-    
+
     # results = perform_search(query, start_date, end_date, limit)
     # Create dummy data for results with audit logs
     results = [
